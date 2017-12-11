@@ -29,11 +29,11 @@ Object * Scene::getNextObject(){
 
 Point Scene::getNextLight(){
     indexL++;
-    return lights[indexL%lights.size()];    
+    return lights[indexL%lights.size()];
 }
 
 void Scene::addObject(Object * o){
-    objects.push_back(o);   
+    objects.push_back(o);
 }
 
 void Scene::addLight(Point l){
@@ -52,9 +52,9 @@ Ray Scene::makeRay(double xo, double yo){
     // calculate point on image plane
     double normx = (xo/N)-0.5;
     double normy = (yo/N)-0.5;
-    
+
     Point po = (*u)*normx + (*v)*normy + (* camera) + (*n);
-    
+
     Ray r = Ray(po, po - (*camera));
     return r;
 }
@@ -64,7 +64,7 @@ Ray Scene::makeRay(double xo, double yo){
 Scene * Scene::initTestScene(int N){
 
     // make new scene with up vector, direction vector and fov
-    Scene * ret = new Scene(new Point(0,1.0,0),new Point(0,0,1.0),55.0,N);  
+    Scene * ret = new Scene(new Point(0,1.0,0),new Point(0,0,1.0),55.0,N);
     // Add in sphere
     Material * test = new Material();
     test->type = DIFFUSE;
@@ -72,7 +72,7 @@ Scene * Scene::initTestScene(int N){
     test->ambient = Color(0.0,0.0,0.0,1.0);
     test->diffuse = Color(0.0,0.6,0.6,1.0);
     test->specular = Color(0.2,0.2,0.2,1.0);
-    
+
     Material * test1 = new Material();
     test1->kr = 0.03;
     test1->type = DIFFUSE;
@@ -149,65 +149,66 @@ Scene * Scene::initTestScene(int N){
     ret->addObject(t2);
 
     // Add light sources
-    ret->addLight(Point(185.0,2000.0,169.0));
-    ret->addLight(Point(400.0,2000.0,320.0));
+    ret->addLight(Point(185.0,500.0,169.0));
+    ret->addLight(Point(400.0,500.0,320.0));
 
     // set Camera location
     ret->setCamera(new Point(278,273,-500));
 
     // Now we will add in smaller box
+
     Point v1 = Point(100,165,65);
     Point v2 = Point(52,165,225);
     Point v3 = Point(210,165,272);
     Point v4 = Point(260,165,114);
     Point v5 = Point(260,0,114);
-    Point v6 = Point(260,165,114);
-    Point v7 = Point(210,165,272);
+    // Point v6 = Point(260,165,114);
+    // Point v7 = Point(210,165,272);
     Point v8 = Point(210,0,272);
     Point v9 = Point(100,0,65);
-    Point v10 = Point(100,165,65);
+    // Point v10 = Point(100,165,65);
     Point v11 = Point(52,0,225);
-    
+
     Point no1 = Point(0.0,1.0,0.0);
     Point no2 = Point(0.0,0.0,-1.0);
     Point no3 = Point(-1.0,0.0,0.0);
     Point no4 = Point(1.0,0.0,0.0);
     Point no5 = Point(0.0,0.0,1.0);
-    
+
     t1 = new Triangle(v2,v3,v1,no1);
     t2 = new Triangle(v4,v1,v3,no1);
     ret->addObject(t1);
     ret->addObject(t2);
     t1->setMaterial(test1);
     t2->setMaterial(test1);
-    
-    t1 = new Triangle(v7,v4,v9,no4);
-    t2 = new Triangle(v5,v7,v8,no4);
+
+    t1 = new Triangle(v3,v4,v9,no4);
+    t2 = new Triangle(v5,v3,v8,no4);
     t1->setMaterial(test1);
     t2->setMaterial(test1);
     ret->addObject(t1);
     ret->addObject(t2);
-    
-    t1 = new Triangle(v9,v10,v4,no4);
+
+    t1 = new Triangle(v9,v1,v4,no4);
     t2 = new Triangle(v9,v4,v5,no4);
     t1->setMaterial(test1);
     t2->setMaterial(test1);
     ret->addObject(t1);
     ret->addObject(t2);
-    
-    t1 = new Triangle(v11,v2,v10,no4);
+
+    t1 = new Triangle(v11,v2,v1,no4);
     t2 = new Triangle(v11,v2,v9,no4);
     t1->setMaterial(test1);
     t2->setMaterial(test1);
     ret->addObject(t1);
     ret->addObject(t2);
-    
-    t1 = new Triangle(v8,v7,v2,no4);
-    t2 = new Triangle(v8,v7,v11,no4);
+
+    t1 = new Triangle(v8,v3,v2,no4);
+    t2 = new Triangle(v8,v3,v11,no4);
     t1->setMaterial(test1);
     t2->setMaterial(test1);
     ret->addObject(t1);
     ret->addObject(t2);
-    
+
     return ret;
 }

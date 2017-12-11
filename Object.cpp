@@ -38,8 +38,7 @@ Sphere::Sphere(Point p, double r){
 #define EPS 1E-6
 
 Point Triangle::getIntersection(Ray r){
-	// YOUR INTERSECTION CODE HERE.
-	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
+
      double detm = glm::determinant(glm::mat3(glm::vec3((p1 - p0).x, (p1 - p0).y, (p1 - p0).z), glm::vec3((p2 - p0).x, (p2 - p0).y, (p2 - p0).z), glm::vec3(-(r.v).x, -(r.v).y, -(r.v).z)));
      double s_a1 = (1/(detm))*(glm::determinant(glm::mat3(glm::vec3((r.p - p0).x, (r.p - p0).y, (r.p - p0).z), glm::vec3((p2 - p0).x, (p2 - p0).y, (p2 - p0).z), glm::vec3(-(r.v).x, -(r.v).y, -(r.v).z))));
      double s_a2 = (1/(detm))*(glm::determinant(glm::mat3(glm::vec3((p1 - p0).x, (p1 - p0).y, (p1 - p0).z), glm::vec3((r.p - p0).x, (r.p - p0).y, (r.p - p0).z), glm::vec3(-(r.v).x, -(r.v).y, -(r.v).z))));
@@ -65,19 +64,29 @@ Point Sphere::getNormal(Point p){
 
 Point Sphere::getIntersection(Ray r){
 
-     double s_b = glm::dot(glm::vec3((r.v*2).x, (r.v*2).y, (r.v*2).z), glm::vec3((r.p-center).x, (r.p-center).y, (r.p-center).z));
-     double s_c = ((double)glm::length2(glm::vec3((r.p-center).x, (r.p-center).y, (r.p-center).z))) - ((double)pow(radius, 2.0));
+     double s_b = ((r.v)*2)*(r.p - center);
+     double s_c = pow(r.p.x - center.x, 2.0) + pow(r.p.y - center.y, 2.0) + pow(r.p.z - center.z, 2.0) - ((double)pow(radius, 2.0));
 
      double b24c = pow(s_b, 2.0) - 4*s_c;
-     double s_t1 = b24c < 0 ? NULL : (-s_b - sqrt(pow(s_b, 2.0) - 4*s_c))/2.0;
-     double s_t2 = b24c < 0 ? NULL : (-s_b + sqrt(pow(s_b, 2.0) - 4*s_c))/2.0;
+     double s_t1 = b24c < 0 ? NULL : (-s_b - sqrt(b24c))/2.0;
+     double s_t2 = b24c < 0 ? NULL : (-s_b + sqrt(b24c))/2.0;
      double s_t = b24c != 0 ? NULL : -s_b / 2.0;
 
      // does not intersect
-     if(b24c < 0) return Point::Infinite();
+     if(b24c <= 0) return Point::Infinite();
      // tangent to sphere
      else if(b24c == 0) return Point((r.p + r.v*s_t).x, (r.p + r.v*s_t).y, (r.p + r.v*s_t).z);
      // intersect 2 points
-     else return (s_t1 < s_t2 && s_t1 > 0) ?  Point((r.p + r.v*s_t1).x, (r.p + r.v*s_t1).y, (r.p + r.v*s_t1).z) : Point((r.p + r.v*s_t2).x, (r.p + r.v*s_t2).y, (r.p + r.v*s_t2).z);
+     else return (s_t1 > 0) ?  Point((r.p + r.v*s_t1).x, (r.p + r.v*s_t1).y, (r.p + r.v*s_t1).z) : Point((r.p + r.v*s_t2).x, (r.p + r.v*s_t2).y, (r.p + r.v*s_t2).z);
+
+     // does not intersect
+
+     // tangent to sphere
+//     else if(b24c == 0) return Point((r.p + r.v*s_t).x, (r.p + r.v*s_t).y, (r.p + r.v*s_t).z);
+     // intersect 2 points
+
+
+     // Point sss = (s_t1 > 0) ?  Point((r.p + r.v*s_t1).x, (r.p + r.v*s_t1).y, (r.p + r.v*s_t1).z) : Point((r.p + r.v*s_t2).x, (r.p + r.v*s_t2).y, (r.p + r.v*s_t2).z);
+     // return sss;
 
 }
